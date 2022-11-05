@@ -2,128 +2,150 @@
 
 namespace App\Entity;
 
+use App\Repository\ThemeVoyageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Themevoyage
- *
- * @ORM\Table(name="themevoyage", indexes={@ORM\Index(name="fk_ThemeVoyage_TypeVoyage1", columns={"TypeVoyage_id"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\ThemevoyageRepository")
+ * @ORM\Entity(repositoryClass=ThemeVoyageRepository::class)
  */
-class Themevoyage
+class ThemeVoyage
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idThemeVoyage", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idthemevoyage;
+    private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="NomThm", type="string", length=45, nullable=false)
+     * @ORM\ManyToOne(targetEntity=TypeVoyage::class, inversedBy="themeVoyages")
      */
-    private $nomthm;
+    private $typeVoyage;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="TitreThm", type="string", length=45, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $titrethm;
+    private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="CaracteristiqueTheme", type="string", length=500, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $caracteristiquetheme;
+    private $titre;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="PrixThm", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $prixthm;
+    private $caracteristique;
 
     /**
-     * @var \Typevoyage
-     *
-     * @ORM\ManyToOne(targetEntity="Typevoyage")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="TypeVoyage_id", referencedColumnName="idTypeVoyage")
-     * })
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $typevoyage;
+    private $prix;
 
-    public function getIdthemevoyage(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity=Voyage::class, mappedBy="themeVoyage")
+     */
+    private $voyages;
+
+    public function __construct()
     {
-        return $this->idthemevoyage;
+        $this->voyages = new ArrayCollection();
     }
 
-    public function getNomthm(): ?string
+    public function getId(): ?int
     {
-        return $this->nomthm;
+        return $this->id;
     }
 
-    public function setNomthm(string $nomthm): self
+    public function getTypeVoyage(): ?TypeVoyage
     {
-        $this->nomthm = $nomthm;
+        return $this->typeVoyage;
+    }
+
+    public function setTypeVoyage(?TypeVoyage $typeVoyage): self
+    {
+        $this->typeVoyage = $typeVoyage;
 
         return $this;
     }
 
-    public function getTitrethm(): ?string
+    public function getName(): ?string
     {
-        return $this->titrethm;
+        return $this->name;
     }
 
-    public function setTitrethm(string $titrethm): self
+    public function setName(string $name): self
     {
-        $this->titrethm = $titrethm;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getCaracteristiquetheme(): ?string
+    public function getTitre(): ?string
     {
-        return $this->caracteristiquetheme;
+        return $this->titre;
     }
 
-    public function setCaracteristiquetheme(string $caracteristiquetheme): self
+    public function setTitre(string $titre): self
     {
-        $this->caracteristiquetheme = $caracteristiquetheme;
+        $this->titre = $titre;
 
         return $this;
     }
 
-    public function getPrixthm(): ?float
+    public function getCaracteristique(): ?string
     {
-        return $this->prixthm;
+        return $this->caracteristique;
     }
 
-    public function setPrixthm(float $prixthm): self
+    public function setCaracteristique(string $caracteristique): self
     {
-        $this->prixthm = $prixthm;
+        $this->caracteristique = $caracteristique;
 
         return $this;
     }
 
-    public function getTypevoyage(): ?Typevoyage
+    public function getPrix(): ?string
     {
-        return $this->typevoyage;
+        return $this->prix;
     }
 
-    public function setTypevoyage(?Typevoyage $typevoyage): self
+    public function setPrix(string $prix): self
     {
-        $this->typevoyage = $typevoyage;
+        $this->prix = $prix;
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Voyage>
+     */
+    public function getVoyages(): Collection
+    {
+        return $this->voyages;
+    }
 
+    public function addVoyage(Voyage $voyage): self
+    {
+        if (!$this->voyages->contains($voyage)) {
+            $this->voyages[] = $voyage;
+            $voyage->setThemeVoyage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoyage(Voyage $voyage): self
+    {
+        if ($this->voyages->removeElement($voyage)) {
+            // set the owning side to null (unless already changed)
+            if ($voyage->getThemeVoyage() === $this) {
+                $voyage->setThemeVoyage(null);
+            }
+        }
+
+        return $this;
+    }
 }

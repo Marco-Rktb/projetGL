@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Topvoyage;
+use App\Entity\TopVoyage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Topvoyage>
+ * @extends ServiceEntityRepository<TopVoyage>
  *
- * @method Topvoyage|null find($id, $lockMode = null, $lockVersion = null)
- * @method Topvoyage|null findOneBy(array $criteria, array $orderBy = null)
- * @method Topvoyage[]    findAll()
- * @method Topvoyage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TopVoyage|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TopVoyage|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TopVoyage[]    findAll()
+ * @method TopVoyage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TopvoyageRepository extends ServiceEntityRepository
+class TopVoyageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Topvoyage::class);
+        parent::__construct($registry, TopVoyage::class);
     }
 
-    public function add(Topvoyage $entity, bool $flush = false): void
+    public function add(TopVoyage $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class TopvoyageRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Topvoyage $entity, bool $flush = false): void
+    public function remove(TopVoyage $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class TopvoyageRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Topvoyage[] Returns an array of Topvoyage objects
+//     * @return TopVoyage[] Returns an array of TopVoyage objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class TopvoyageRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Topvoyage
+//    public function findOneBySomeField($value): ?TopVoyage
 //    {
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')

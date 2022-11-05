@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\SiteTouristiqueRepository;
+use App\Repository\LocVoitureRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=SiteTouristiqueRepository::class)
+ * @ORM\Entity(repositoryClass=LocVoitureRepository::class)
  */
-class SiteTouristique
+class LocVoiture
 {
     /**
      * @ORM\Id
@@ -20,27 +20,22 @@ class SiteTouristique
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=District::class, inversedBy="siteTouristiques")
-     */
-    private $district;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $capacite;
+
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
     private $prix;
 
     /**
-     * @ORM\OneToMany(targetEntity=Voyage::class, mappedBy="siteTouristique")
+     * @ORM\OneToMany(targetEntity=Voyage::class, mappedBy="locVoiture")
      */
     private $voyages;
 
@@ -54,38 +49,26 @@ class SiteTouristique
         return $this->id;
     }
 
-    public function getDistrict(): ?District
-    {
-        return $this->district;
-    }
-
-    public function setDistrict(?District $district): self
-    {
-        $this->district = $district;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string $type): self
+    public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCapacite(): ?string
+    {
+        return $this->capacite;
+    }
+
+    public function setCapacite(?string $capacite): self
+    {
+        $this->capacite = $capacite;
 
         return $this;
     }
@@ -95,7 +78,7 @@ class SiteTouristique
         return $this->prix;
     }
 
-    public function setPrix(string $prix): self
+    public function setPrix(?string $prix): self
     {
         $this->prix = $prix;
 
@@ -114,7 +97,7 @@ class SiteTouristique
     {
         if (!$this->voyages->contains($voyage)) {
             $this->voyages[] = $voyage;
-            $voyage->setSiteTouristique($this);
+            $voyage->setLocVoiture($this);
         }
 
         return $this;
@@ -124,8 +107,8 @@ class SiteTouristique
     {
         if ($this->voyages->removeElement($voyage)) {
             // set the owning side to null (unless already changed)
-            if ($voyage->getSiteTouristique() === $this) {
-                $voyage->setSiteTouristique(null);
+            if ($voyage->getLocVoiture() === $this) {
+                $voyage->setLocVoiture(null);
             }
         }
 

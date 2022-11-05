@@ -2,90 +2,207 @@
 
 namespace App\Entity;
 
+use App\Repository\DistrictRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * District
- *
- * @ORM\Table(name="district", indexes={@ORM\Index(name="fk_district_region1", columns={"idRegion"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\DistrictRepository")
+ * @ORM\Entity(repositoryClass=DistrictRepository::class)
  */
 class District
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idDistrict", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $iddistrict;
+    private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=200, nullable=false)
+     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="districts")
      */
-    private $name;
+    private $region;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="status", type="string", length=45, nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $status;
 
     /**
-     * @var \Region
-     *
-     * @ORM\ManyToOne(targetEntity="Region")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idRegion", referencedColumnName="idregion")
-     * })
+     * @ORM\OneToMany(targetEntity=Activite::class, mappedBy="district")
      */
-    private $idregion;
+    private $activites;
 
-    public function getIddistrict(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity=Hotel::class, mappedBy="district")
+     */
+    private $hotels;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TopVoyage::class, mappedBy="district")
+     */
+    private $topVoyages;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SiteTouristique::class, mappedBy="district")
+     */
+    private $siteTouristiques;
+
+    public function __construct()
     {
-        return $this->iddistrict;
+        $this->activites = new ArrayCollection();
+        $this->hotels = new ArrayCollection();
+        $this->topVoyages = new ArrayCollection();
+        $this->siteTouristiques = new ArrayCollection();
     }
 
-    public function getName(): ?string
+    public function getId(): ?int
     {
-        return $this->name;
+        return $this->id;
     }
 
-    public function setName(string $name): self
+    public function getRegion(): ?Region
     {
-        $this->name = $name;
+        return $this->region;
+    }
+
+    public function setRegion(?Region $region): self
+    {
+        $this->region = $region;
 
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function isStatus(): ?bool
     {
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(?bool $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getIdregion(): ?Region
+    /**
+     * @return Collection<int, Activite>
+     */
+    public function getActivites(): Collection
     {
-        return $this->idregion;
+        return $this->activites;
     }
 
-    public function setIdregion(?Region $idregion): self
+    public function addActivites(Activite $activites): self
     {
-        $this->idregion = $idregion;
+        if (!$this->activites->contains($activites)) {
+            $this->activites[] = $activites;
+            $activites->setDistrict($this);
+        }
 
         return $this;
     }
 
+    public function removeActivites(Activite $activites): self
+    {
+        if ($this->activites->removeElement($activites)) {
+            // set the owning side to null (unless already changed)
+            if ($activites->getDistrict() === $this) {
+                $activites->setDistrict(null);
+            }
+        }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Hotel>
+     */
+    public function getHotels(): Collection
+    {
+        return $this->hotels;
+    }
+
+    public function addHotel(Hotel $hotel): self
+    {
+        if (!$this->hotels->contains($hotel)) {
+            $this->hotels[] = $hotel;
+            $hotel->setDistrict($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHotel(Hotel $hotel): self
+    {
+        if ($this->hotels->removeElement($hotel)) {
+            // set the owning side to null (unless already changed)
+            if ($hotel->getDistrict() === $this) {
+                $hotel->setDistrict(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TopVoyage>
+     */
+    public function getTopVoyages(): Collection
+    {
+        return $this->topVoyages;
+    }
+
+    public function addTopVoyage(TopVoyage $topVoyage): self
+    {
+        if (!$this->topVoyages->contains($topVoyage)) {
+            $this->topVoyages[] = $topVoyage;
+            $topVoyage->setDistrict($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopVoyage(TopVoyage $topVoyage): self
+    {
+        if ($this->topVoyages->removeElement($topVoyage)) {
+            // set the owning side to null (unless already changed)
+            if ($topVoyage->getDistrict() === $this) {
+                $topVoyage->setDistrict(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SiteTouristique>
+     */
+    public function getSiteTouristiques(): Collection
+    {
+        return $this->siteTouristiques;
+    }
+
+    public function addSiteTouristique(SiteTouristique $siteTouristique): self
+    {
+        if (!$this->siteTouristiques->contains($siteTouristique)) {
+            $this->siteTouristiques[] = $siteTouristique;
+            $siteTouristique->setDistrict($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSiteTouristique(SiteTouristique $siteTouristique): self
+    {
+        if ($this->siteTouristiques->removeElement($siteTouristique)) {
+            // set the owning side to null (unless already changed)
+            if ($siteTouristique->getDistrict() === $this) {
+                $siteTouristique->setDistrict(null);
+            }
+        }
+
+        return $this;
+    }
 }

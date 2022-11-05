@@ -2,72 +2,73 @@
 
 namespace App\Entity;
 
+use App\Repository\TypeVoyageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Typevoyage
- *
- * @ORM\Table(name="typevoyage")
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\TypevoyageRepository")
+ * @ORM\Entity(repositoryClass=TypeVoyageRepository::class)
  */
-class Typevoyage
+class TypeVoyage
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idTypeVoyage", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idtypevoyage;
+    private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="NomTyv", type="string", length=100, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $nomtyv;
+    private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="TitreTyv", type="string", length=45, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $titretyv;
+    private $titre;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="Caracteristique", type="string", length=500, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
     private $caracteristique;
 
-    public function getIdtypevoyage(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity=ThemeVoyage::class, mappedBy="typeVoyage")
+     */
+    private $themeVoyages;
+
+    public function __construct()
     {
-        return $this->idtypevoyage;
+        $this->themeVoyages = new ArrayCollection();
     }
 
-    public function getNomtyv(): ?string
+    public function getId(): ?int
     {
-        return $this->nomtyv;
+        return $this->id;
     }
 
-    public function setNomtyv(string $nomtyv): self
+    public function getName(): ?string
     {
-        $this->nomtyv = $nomtyv;
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getTitretyv(): ?string
+    public function getTitre(): ?string
     {
-        return $this->titretyv;
+        return $this->titre;
     }
 
-    public function setTitretyv(string $titretyv): self
+    public function setTitre(?string $titre): self
     {
-        $this->titretyv = $titretyv;
+        $this->titre = $titre;
 
         return $this;
     }
@@ -84,5 +85,33 @@ class Typevoyage
         return $this;
     }
 
+    /**
+     * @return Collection<int, ThemeVoyage>
+     */
+    public function getThemeVoyages(): Collection
+    {
+        return $this->themeVoyages;
+    }
 
+    public function addThemeVoyage(ThemeVoyage $themeVoyage): self
+    {
+        if (!$this->themeVoyages->contains($themeVoyage)) {
+            $this->themeVoyages[] = $themeVoyage;
+            $themeVoyage->setTypeVoyage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeThemeVoyage(ThemeVoyage $themeVoyage): self
+    {
+        if ($this->themeVoyages->removeElement($themeVoyage)) {
+            // set the owning side to null (unless already changed)
+            if ($themeVoyage->getTypeVoyage() === $this) {
+                $themeVoyage->setTypeVoyage(null);
+            }
+        }
+
+        return $this;
+    }
 }

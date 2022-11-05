@@ -2,140 +2,150 @@
 
 namespace App\Entity;
 
+use App\Repository\VoyageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Voyage
- *
- * @ORM\Table(name="voyage", indexes={@ORM\Index(name="fk_Voyage_ThemeVoyage1", columns={"idThemeVoyage"}), @ORM\Index(name="fk_Voyage_Hotel1", columns={"idHotel"}), @ORM\Index(name="fk_Voyage_Voiture1", columns={"idVoiture"}), @ORM\Index(name="fk_Voyage_Activite1", columns={"idActivite"}), @ORM\Index(name="fk_Voyage_SiteTouristique1", columns={"idSiteTouristique"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\VoyageRepository")
+ * @ORM\Entity(repositoryClass=VoyageRepository::class)
  */
 class Voyage
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idVoyage", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idvoyage;
+    private $id;
 
     /**
-     * @var \Themevoyage
-     *
-     * @ORM\ManyToOne(targetEntity="Themevoyage")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idThemeVoyage", referencedColumnName="idThemeVoyage")
-     * })
+     * @ORM\ManyToOne(targetEntity=ThemeVoyage::class, inversedBy="voyages")
      */
-    private $idthemevoyage;
+    private $themeVoyage;
 
     /**
-     * @var \Activite
-     *
-     * @ORM\ManyToOne(targetEntity="Activite")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idActivite", referencedColumnName="idActivite")
-     * })
+     * @ORM\ManyToOne(targetEntity=SiteTouristique::class, inversedBy="voyages")
      */
-    private $idactivite;
+    private $siteTouristique;
 
     /**
-     * @var \Sitetouristique
-     *
-     * @ORM\ManyToOne(targetEntity="Sitetouristique")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idSiteTouristique", referencedColumnName="idSiteTouristique")
-     * })
+     * @ORM\ManyToOne(targetEntity=Activite::class, inversedBy="voyages")
      */
-    private $idsitetouristique;
+    private $activite;
 
     /**
-     * @var \Voiture
-     *
-     * @ORM\ManyToOne(targetEntity="Voiture")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idVoiture", referencedColumnName="idVoiture")
-     * })
+     * @ORM\ManyToOne(targetEntity=Hotel::class, inversedBy="voyages")
      */
-    private $idvoiture;
+    private $hotel;
 
     /**
-     * @var \Hotel
-     *
-     * @ORM\ManyToOne(targetEntity="Hotel")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idHotel", referencedColumnName="idHotel")
-     * })
+     * @ORM\ManyToOne(targetEntity=LocVoiture::class, inversedBy="voyages")
      */
-    private $idhotel;
+    private $locVoiture;
 
-    public function getIdvoyage(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="voyage")
+     */
+    private $reservations;
+
+    public function __construct()
     {
-        return $this->idvoyage;
+        $this->reservations = new ArrayCollection();
     }
 
-    public function getIdthemevoyage(): ?Themevoyage
+    public function getId(): ?int
     {
-        return $this->idthemevoyage;
+        return $this->id;
     }
 
-    public function setIdthemevoyage(?Themevoyage $idthemevoyage): self
+    public function getThemeVoyage(): ?ThemeVoyage
     {
-        $this->idthemevoyage = $idthemevoyage;
+        return $this->themeVoyage;
+    }
+
+    public function setThemeVoyage(?ThemeVoyage $themeVoyage): self
+    {
+        $this->themeVoyage = $themeVoyage;
 
         return $this;
     }
 
-    public function getIdactivite(): ?Activite
+    public function getSiteTouristique(): ?SiteTouristique
     {
-        return $this->idactivite;
+        return $this->siteTouristique;
     }
 
-    public function setIdactivite(?Activite $idactivite): self
+    public function setSiteTouristique(?SiteTouristique $siteTouristique): self
     {
-        $this->idactivite = $idactivite;
+        $this->siteTouristique = $siteTouristique;
 
         return $this;
     }
 
-    public function getIdsitetouristique(): ?Sitetouristique
+    public function getActivite(): ?Activite
     {
-        return $this->idsitetouristique;
+        return $this->activite;
     }
 
-    public function setIdsitetouristique(?Sitetouristique $idsitetouristique): self
+    public function setActivite(?Activite $activite): self
     {
-        $this->idsitetouristique = $idsitetouristique;
+        $this->activite = $activite;
 
         return $this;
     }
 
-    public function getIdvoiture(): ?Voiture
+    public function getHotel(): ?Hotel
     {
-        return $this->idvoiture;
+        return $this->hotel;
     }
 
-    public function setIdvoiture(?Voiture $idvoiture): self
+    public function setHotel(?Hotel $hotel): self
     {
-        $this->idvoiture = $idvoiture;
+        $this->hotel = $hotel;
 
         return $this;
     }
 
-    public function getIdhotel(): ?Hotel
+    public function getLocVoiture(): ?LocVoiture
     {
-        return $this->idhotel;
+        return $this->locVoiture;
     }
 
-    public function setIdhotel(?Hotel $idhotel): self
+    public function setLocVoiture(?LocVoiture $locVoiture): self
     {
-        $this->idhotel = $idhotel;
+        $this->locVoiture = $locVoiture;
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
 
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setVoyage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getVoyage() === $this) {
+                $reservation->setVoyage(null);
+            }
+        }
+
+        return $this;
+    }
 }

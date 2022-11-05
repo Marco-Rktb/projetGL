@@ -2,53 +2,63 @@
 
 namespace App\Entity;
 
+use App\Repository\RegionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Region
- *
- * @ORM\Table(name="region", indexes={@ORM\Index(name="fk_region_province", columns={"idProvince"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\RegionRepository")
+ * @ORM\Entity(repositoryClass=RegionRepository::class)
  */
 class Region
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idregion", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idregion;
+    private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=200, nullable=false)
+     * @ORM\ManyToOne(targetEntity=Province::class, inversedBy="regions")
+     */
+    private $province;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="status", type="string", length=45, nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $status;
 
     /**
-     * @var \Province
-     *
-     * @ORM\ManyToOne(targetEntity="Province")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idProvince", referencedColumnName="idprovince")
-     * })
+     * @ORM\OneToMany(targetEntity=District::class, mappedBy="region")
      */
-    private $idprovince;
+    private $districts;
 
-    public function getIdregion(): ?int
+    public function __construct()
     {
-        return $this->idregion;
+        $this->districts = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getProvince(): ?Province
+    {
+        return $this->province;
+    }
+
+    public function setProvince(?Province $province): self
+    {
+        $this->province = $province;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -63,29 +73,45 @@ class Region
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function isStatus(): ?bool
     {
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(?bool $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getIdprovince(): ?Province
+    /**
+     * @return Collection<int, District>
+     */
+    public function getDistricts(): Collection
     {
-        return $this->idprovince;
+        return $this->districts;
     }
 
-    public function setIdprovince(?Province $idprovince): self
+    public function addDistrict(District $district): self
     {
-        $this->idprovince = $idprovince;
+        if (!$this->districts->contains($district)) {
+            $this->districts[] = $district;
+            $district->setRegion($this);
+        }
 
         return $this;
     }
 
+    public function removeDistrict(District $district): self
+    {
+        if ($this->districts->removeElement($district)) {
+            // set the owning side to null (unless already changed)
+            if ($district->getRegion() === $this) {
+                $district->setRegion(null);
+            }
+        }
 
+        return $this;
+    }
 }

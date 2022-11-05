@@ -2,153 +2,125 @@
 
 namespace App\Entity;
 
+use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Reservation
- *
- * @ORM\Table(name="reservation", indexes={@ORM\Index(name="fk_Reservation_Infos_client1", columns={"idClient"}), @ORM\Index(name="fk_Reservation_users1", columns={"idUsers"}), @ORM\Index(name="fk_Reservation_Voyage1", columns={"idVoyage"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
+ * @ORM\Entity(repositoryClass=ReservationRepository::class)
  */
 class Reservation
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idResrvation", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idresrvation;
+    private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="DateDepart", type="date", nullable=false)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reservations")
      */
-    private $datedepart;
+    private $user;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="DateRetour", type="date", nullable=false)
+     * @ORM\ManyToOne(targetEntity=InfoClient::class, inversedBy="reservations")
      */
-    private $dateretour;
+    private $client;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="NbrPersonne", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\ManyToOne(targetEntity=Voyage::class, inversedBy="reservations")
      */
-    private $nbrpersonne;
+    private $voyage;
 
     /**
-     * @var \InfosClient
-     *
-     * @ORM\ManyToOne(targetEntity="InfosClient")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idClient", referencedColumnName="idClient")
-     * })
+     * @ORM\Column(type="datetime")
      */
-    private $idclient;
+    private $dateDepart;
 
     /**
-     * @var \Users
-     *
-     * @ORM\ManyToOne(targetEntity="Users")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idUsers", referencedColumnName="idusers")
-     * })
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $idusers;
+    private $dateRetoure;
 
     /**
-     * @var \Voyage
-     *
-     * @ORM\ManyToOne(targetEntity="Voyage")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idVoyage", referencedColumnName="idVoyage")
-     * })
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $idvoyage;
+    private $nbrPersonne;
 
-    public function getIdresrvation(): ?int
+    public function getId(): ?int
     {
-        return $this->idresrvation;
+        return $this->id;
     }
 
-    public function getDatedepart(): ?\DateTimeInterface
+    public function getUser(): ?User
     {
-        return $this->datedepart;
+        return $this->user;
     }
 
-    public function setDatedepart(\DateTimeInterface $datedepart): self
+    public function setUser(?User $user): self
     {
-        $this->datedepart = $datedepart;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getDateretour(): ?\DateTimeInterface
+    public function getClient(): ?InfoClient
     {
-        return $this->dateretour;
+        return $this->client;
     }
 
-    public function setDateretour(\DateTimeInterface $dateretour): self
+    public function setClient(?InfoClient $client): self
     {
-        $this->dateretour = $dateretour;
+        $this->client = $client;
 
         return $this;
     }
 
-    public function getNbrpersonne(): ?float
+    public function getVoyage(): ?Voyage
     {
-        return $this->nbrpersonne;
+        return $this->voyage;
     }
 
-    public function setNbrpersonne(float $nbrpersonne): self
+    public function setVoyage(?Voyage $voyage): self
     {
-        $this->nbrpersonne = $nbrpersonne;
+        $this->voyage = $voyage;
 
         return $this;
     }
 
-    public function getIdclient(): ?InfosClient
+    public function getDateDepart(): ?\DateTimeInterface
     {
-        return $this->idclient;
+        return $this->dateDepart;
     }
 
-    public function setIdclient(?InfosClient $idclient): self
+    public function setDateDepart(\DateTimeInterface $dateDepart): self
     {
-        $this->idclient = $idclient;
+        $this->dateDepart = $dateDepart;
 
         return $this;
     }
 
-    public function getIdusers(): ?Users
+    public function getDateRetoure(): ?\DateTimeInterface
     {
-        return $this->idusers;
+        return $this->dateRetoure;
     }
 
-    public function setIdusers(?Users $idusers): self
+    public function setDateRetoure(?\DateTimeInterface $dateRetoure): self
     {
-        $this->idusers = $idusers;
+        $this->dateRetoure = $dateRetoure;
 
         return $this;
     }
 
-    public function getIdvoyage(): ?Voyage
+    public function getNbrPersonne(): ?int
     {
-        return $this->idvoyage;
+        return $this->nbrPersonne;
     }
 
-    public function setIdvoyage(?Voyage $idvoyage): self
+    public function setNbrPersonne(?int $nbrPersonne): self
     {
-        $this->idvoyage = $idvoyage;
+        $this->nbrPersonne = $nbrPersonne;
 
         return $this;
     }
-
-
 }

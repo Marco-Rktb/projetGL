@@ -2,128 +2,133 @@
 
 namespace App\Entity;
 
+use App\Repository\ActiviteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Activite
- *
- * @ORM\Table(name="activite", indexes={@ORM\Index(name="fk_Activite_district1", columns={"idDistrict"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\ActiviteRepository")
+ * @ORM\Entity(repositoryClass=ActiviteRepository::class)
  */
 class Activite
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idActivite", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idactivite;
+    private $id;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="NomAct", type="string", length=45, nullable=true)
+     * @ORM\ManyToOne(targetEntity=District::class, inversedBy="name")
      */
-    private $nomact;
+    private $district;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="TypeAct", type="string", length=100, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $typeact;
+    private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="CaracteristiqueAct", type="string", length=500, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $caracteristiqueact;
+    private $type;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="PrixAct", type="string", length=45, nullable=false)
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $prixact;
+    private $prix;
 
     /**
-     * @var \District
-     *
-     * @ORM\ManyToOne(targetEntity="District")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idDistrict", referencedColumnName="idDistrict")
-     * })
+     * @ORM\OneToMany(targetEntity=Voyage::class, mappedBy="activite")
      */
-    private $iddistrict;
+    private $voyages;
 
-    public function getIdactivite(): ?int
+    public function __construct()
     {
-        return $this->idactivite;
+        $this->voyages = new ArrayCollection();
     }
 
-    public function getNomact(): ?string
+    public function getId(): ?int
     {
-        return $this->nomact;
+        return $this->id;
     }
 
-    public function setNomact(?string $nomact): self
+    public function getDistrict(): ?District
     {
-        $this->nomact = $nomact;
+        return $this->district;
+    }
+
+    public function setDistrict(?District $district): self
+    {
+        $this->district = $district;
 
         return $this;
     }
 
-    public function getTypeact(): ?string
+    public function getName(): ?string
     {
-        return $this->typeact;
+        return $this->name;
     }
 
-    public function setTypeact(string $typeact): self
+    public function setName(string $name): self
     {
-        $this->typeact = $typeact;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getCaracteristiqueact(): ?string
+    public function getType(): ?string
     {
-        return $this->caracteristiqueact;
+        return $this->type;
     }
 
-    public function setCaracteristiqueact(string $caracteristiqueact): self
+    public function setType(?string $type): self
     {
-        $this->caracteristiqueact = $caracteristiqueact;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getPrixact(): ?string
+    public function getPrix(): ?string
     {
-        return $this->prixact;
+        return $this->prix;
     }
 
-    public function setPrixact(string $prixact): self
+    public function setPrix(string $prix): self
     {
-        $this->prixact = $prixact;
+        $this->prix = $prix;
 
         return $this;
     }
 
-    public function getIddistrict(): ?District
+    /**
+     * @return Collection<int, Voyage>
+     */
+    public function getVoyages(): Collection
     {
-        return $this->iddistrict;
+        return $this->voyages;
     }
 
-    public function setIddistrict(?District $iddistrict): self
+    public function addVoyage(Voyage $voyage): self
     {
-        $this->iddistrict = $iddistrict;
+        if (!$this->voyages->contains($voyage)) {
+            $this->voyages[] = $voyage;
+            $voyage->setActivite($this);
+        }
 
         return $this;
     }
 
+    public function removeVoyage(Voyage $voyage): self
+    {
+        if ($this->voyages->removeElement($voyage)) {
+            // set the owning side to null (unless already changed)
+            if ($voyage->getActivite() === $this) {
+                $voyage->setActivite(null);
+            }
+        }
 
+        return $this;
+    }
 }

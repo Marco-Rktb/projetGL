@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Themevoyage;
+use App\Entity\ThemeVoyage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Themevoyage>
+ * @extends ServiceEntityRepository<ThemeVoyage>
  *
- * @method Themevoyage|null find($id, $lockMode = null, $lockVersion = null)
- * @method Themevoyage|null findOneBy(array $criteria, array $orderBy = null)
- * @method Themevoyage[]    findAll()
- * @method Themevoyage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ThemeVoyage|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ThemeVoyage|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ThemeVoyage[]    findAll()
+ * @method ThemeVoyage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ThemevoyageRepository extends ServiceEntityRepository
+class ThemeVoyageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Themevoyage::class);
+        parent::__construct($registry, ThemeVoyage::class);
     }
 
-    public function add(Themevoyage $entity, bool $flush = false): void
+    public function add(ThemeVoyage $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class ThemevoyageRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Themevoyage $entity, bool $flush = false): void
+    public function remove(ThemeVoyage $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class ThemevoyageRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Themevoyage[] Returns an array of Themevoyage objects
+//     * @return ThemeVoyage[] Returns an array of ThemeVoyage objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class ThemevoyageRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Themevoyage
+//    public function findOneBySomeField($value): ?ThemeVoyage
 //    {
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')

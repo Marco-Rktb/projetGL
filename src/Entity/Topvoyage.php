@@ -2,109 +2,91 @@
 
 namespace App\Entity;
 
+use App\Repository\TopVoyageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Topvoyage
- *
- * @ORM\Table(name="topvoyage", indexes={@ORM\Index(name="fk_TopVoyage_district1", columns={"iddistrict"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\TopvoyageRepository")
+ * @ORM\Entity(repositoryClass=TopVoyageRepository::class)
  */
-class Topvoyage
+class TopVoyage
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idTopVoyage", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idtopvoyage;
+    private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="TypeTopv", type="string", length=100, nullable=false)
+     * @ORM\ManyToOne(targetEntity=District::class, inversedBy="topVoyages")
      */
-    private $typetopv;
+    private $district;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="NomTopv", type="string", length=45, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $nomtopv;
+    private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="CaracteristiqueTopv", type="string", length=500, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $caracteristiquetopv;
+    private $type;
 
     /**
-     * @var \District
-     *
-     * @ORM\ManyToOne(targetEntity="District")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="iddistrict", referencedColumnName="idDistrict")
-     * })
+     * @ORM\Column(type="string", length=255)
      */
-    private $iddistrict;
+    private $caracteristique;
 
-    public function getIdtopvoyage(): ?int
+    public function getId(): ?int
     {
-        return $this->idtopvoyage;
+        return $this->id;
     }
 
-    public function getTypetopv(): ?string
+    public function getDistrict(): ?District
     {
-        return $this->typetopv;
+        return $this->district;
     }
 
-    public function setTypetopv(string $typetopv): self
+    public function setDistrict(?District $district): self
     {
-        $this->typetopv = $typetopv;
+        $this->district = $district;
 
         return $this;
     }
 
-    public function getNomtopv(): ?string
+    public function getName(): ?string
     {
-        return $this->nomtopv;
+        return $this->name;
     }
 
-    public function setNomtopv(string $nomtopv): self
+    public function setName(string $name): self
     {
-        $this->nomtopv = $nomtopv;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getCaracteristiquetopv(): ?string
+    public function getType(): ?string
     {
-        return $this->caracteristiquetopv;
+        return $this->type;
     }
 
-    public function setCaracteristiquetopv(string $caracteristiquetopv): self
+    public function setType(string $type): self
     {
-        $this->caracteristiquetopv = $caracteristiquetopv;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getIddistrict(): ?District
+    public function getCaracteristique(): ?string
     {
-        return $this->iddistrict;
+        return $this->caracteristique;
     }
 
-    public function setIddistrict(?District $iddistrict): self
+    public function setCaracteristique(string $caracteristique): self
     {
-        $this->iddistrict = $iddistrict;
+        $this->caracteristique = $caracteristique;
 
         return $this;
     }
-
-
 }

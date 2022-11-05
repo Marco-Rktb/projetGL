@@ -2,166 +2,184 @@
 
 namespace App\Entity;
 
+use App\Repository\HotelRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Hotel
- *
- * @ORM\Table(name="hotel", indexes={@ORM\Index(name="fk_Hotel_district1", columns={"idDistrict"})})
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Repository\HotelRepository")
+ * @ORM\Entity(repositoryClass=HotelRepository::class)
  */
 class Hotel
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="idHotel", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $idhotel;
+    private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="TypeHotel", type="string", length=100, nullable=false)
+     * @ORM\ManyToOne(targetEntity=District::class, inversedBy="hotels")
      */
-    private $typehotel;
+    private $district;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="NomHotel", type="string", length=45, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $nomhotel;
+    private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="AdresseHotel", type="string", length=45, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $adressehotel;
+    private $type;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="SupChambre", type="string", length=45, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $supchambre;
+    private $adresse;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="CaracteristiqueHotel", type="string", length=500, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $caracteristiquehotel;
+    private $supChambre;
 
     /**
-     * @var float|null
-     *
-     * @ORM\Column(name="PrixChambre", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $prixchambre;
+    private $caracteristic;
 
     /**
-     * @var \District
-     *
-     * @ORM\ManyToOne(targetEntity="District")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idDistrict", referencedColumnName="idDistrict")
-     * })
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $iddistrict;
+    private $prix;
 
-    public function getIdhotel(): ?int
+    /**
+     * @ORM\OneToMany(targetEntity=Voyage::class, mappedBy="hotel")
+     */
+    private $voyages;
+
+    public function __construct()
     {
-        return $this->idhotel;
+        $this->voyages = new ArrayCollection();
     }
 
-    public function getTypehotel(): ?string
+    public function getId(): ?int
     {
-        return $this->typehotel;
+        return $this->id;
     }
 
-    public function setTypehotel(string $typehotel): self
+    public function getDistrict(): ?District
     {
-        $this->typehotel = $typehotel;
+        return $this->district;
+    }
+
+    public function setDistrict(?District $district): self
+    {
+        $this->district = $district;
 
         return $this;
     }
 
-    public function getNomhotel(): ?string
+    public function getName(): ?string
     {
-        return $this->nomhotel;
+        return $this->name;
     }
 
-    public function setNomhotel(string $nomhotel): self
+    public function setName(string $name): self
     {
-        $this->nomhotel = $nomhotel;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getAdressehotel(): ?string
+    public function getType(): ?string
     {
-        return $this->adressehotel;
+        return $this->type;
     }
 
-    public function setAdressehotel(string $adressehotel): self
+    public function setType(string $type): self
     {
-        $this->adressehotel = $adressehotel;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getSupchambre(): ?string
+    public function getAdresse(): ?string
     {
-        return $this->supchambre;
+        return $this->adresse;
     }
 
-    public function setSupchambre(string $supchambre): self
+    public function setAdresse(string $adresse): self
     {
-        $this->supchambre = $supchambre;
+        $this->adresse = $adresse;
 
         return $this;
     }
 
-    public function getCaracteristiquehotel(): ?string
+    public function getSupChambre(): ?string
     {
-        return $this->caracteristiquehotel;
+        return $this->supChambre;
     }
 
-    public function setCaracteristiquehotel(string $caracteristiquehotel): self
+    public function setSupChambre(string $supChambre): self
     {
-        $this->caracteristiquehotel = $caracteristiquehotel;
+        $this->supChambre = $supChambre;
 
         return $this;
     }
 
-    public function getPrixchambre(): ?float
+    public function getCaracteristic(): ?string
     {
-        return $this->prixchambre;
+        return $this->caracteristic;
     }
 
-    public function setPrixchambre(?float $prixchambre): self
+    public function setCaracteristic(?string $caracteristic): self
     {
-        $this->prixchambre = $prixchambre;
+        $this->caracteristic = $caracteristic;
 
         return $this;
     }
 
-    public function getIddistrict(): ?District
+    public function getPrix(): ?string
     {
-        return $this->iddistrict;
+        return $this->prix;
     }
 
-    public function setIddistrict(?District $iddistrict): self
+    public function setPrix(string $prix): self
     {
-        $this->iddistrict = $iddistrict;
+        $this->prix = $prix;
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Voyage>
+     */
+    public function getVoyages(): Collection
+    {
+        return $this->voyages;
+    }
 
+    public function addVoyage(Voyage $voyage): self
+    {
+        if (!$this->voyages->contains($voyage)) {
+            $this->voyages[] = $voyage;
+            $voyage->setHotel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoyage(Voyage $voyage): self
+    {
+        if ($this->voyages->removeElement($voyage)) {
+            // set the owning side to null (unless already changed)
+            if ($voyage->getHotel() === $this) {
+                $voyage->setHotel(null);
+            }
+        }
+
+        return $this;
+    }
 }

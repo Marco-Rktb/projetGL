@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Sitetouristique;
+use App\Entity\SiteTouristique;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Sitetouristique>
+ * @extends ServiceEntityRepository<SiteTouristique>
  *
- * @method Sitetouristique|null find($id, $lockMode = null, $lockVersion = null)
- * @method Sitetouristique|null findOneBy(array $criteria, array $orderBy = null)
- * @method Sitetouristique[]    findAll()
- * @method Sitetouristique[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SiteTouristique|null find($id, $lockMode = null, $lockVersion = null)
+ * @method SiteTouristique|null findOneBy(array $criteria, array $orderBy = null)
+ * @method SiteTouristique[]    findAll()
+ * @method SiteTouristique[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SitetouristiqueRepository extends ServiceEntityRepository
+class SiteTouristiqueRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Sitetouristique::class);
+        parent::__construct($registry, SiteTouristique::class);
     }
 
-    public function add(Sitetouristique $entity, bool $flush = false): void
+    public function add(SiteTouristique $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class SitetouristiqueRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Sitetouristique $entity, bool $flush = false): void
+    public function remove(SiteTouristique $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class SitetouristiqueRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Sitetouristique[] Returns an array of Sitetouristique objects
+//     * @return SiteTouristique[] Returns an array of SiteTouristique objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class SitetouristiqueRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Sitetouristique
+//    public function findOneBySomeField($value): ?SiteTouristique
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')

@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Identitemada;
+use App\Entity\InfoClient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Identitemada>
+ * @extends ServiceEntityRepository<InfoClient>
  *
- * @method Identitemada|null find($id, $lockMode = null, $lockVersion = null)
- * @method Identitemada|null findOneBy(array $criteria, array $orderBy = null)
- * @method Identitemada[]    findAll()
- * @method Identitemada[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method InfoClient|null find($id, $lockMode = null, $lockVersion = null)
+ * @method InfoClient|null findOneBy(array $criteria, array $orderBy = null)
+ * @method InfoClient[]    findAll()
+ * @method InfoClient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class IdentitemadaRepository extends ServiceEntityRepository
+class InfoClientRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Identitemada::class);
+        parent::__construct($registry, InfoClient::class);
     }
 
-    public function add(Identitemada $entity, bool $flush = false): void
+    public function add(InfoClient $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class IdentitemadaRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Identitemada $entity, bool $flush = false): void
+    public function remove(InfoClient $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class IdentitemadaRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Identitemada[] Returns an array of Identitemada objects
+//     * @return InfoClient[] Returns an array of InfoClient objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class IdentitemadaRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Identitemada
+//    public function findOneBySomeField($value): ?InfoClient
 //    {
 //        return $this->createQueryBuilder('i')
 //            ->andWhere('i.exampleField = :val')
